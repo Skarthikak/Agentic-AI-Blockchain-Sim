@@ -242,6 +242,17 @@ Have questions, ideas, or want to collaborate?
 - 💼 LinkedIn: [Your Profile](https://linkedin.com/in/karthikcse)
 
 ---
+## 📸 Live Demo & Screenshots
+
+### Dashboard Overview
+![Dashboard Screenshot](demo-screenshots/dashboard.png)
+
+### System Architecture  
+![Architecture Diagram](demo-screenshots/architecture.png)
+
+### Multi-Agent Coordination
+![Agent Flow](demo-screenshots/agent-flow.png)
+
 
 **⭐ If this project inspires you, please give it a star on GitHub!**
 
