@@ -1,0 +1,64 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+/**
+ * @title PredictionMarket
+ * @dev Mock prediction market for AI agent participation
+ */
+contract PredictionMarket {
+    struct Prediction {
+        address agent;
+        uint256 marketId;
+        uint256 predictionValue;
+        uint256 timestamp;
+        bool resolved;
+        bool correct;
+    }
+    
+    mapping(uint256 => Prediction) public predictions;
+    mapping(address => uint256) public agentScores;
+    uint256 public predictionCount;
+    
+    event PredictionSubmitted(
+        uint256 indexed predictionId,
+        address indexed agent,
+        uint256 marketId,
+        uint256 predictionValue
+    );
+    
+    event PredictionResolved(
+        uint256 indexed predictionId,
+        bool correct
+    );
+    
+    function submitPrediction(uint256 marketId, uint256 predictionValue) external {
+        predictionCount++;
+        predictions[predictionCount] = Prediction(
+            msg.sender,
+            marketId,
+            predictionValue,
+            block.timestamp,
+            false,
+            false
+        );
+        
+        emit PredictionSubmitted(predictionCount, msg.sender, marketId, predictionValue);
+    }
+    
+    function resolvePrediction(uint256 predictionId, bool correct) external {
+        require(!predictions[predictionId].resolved, "Prediction already resolved");
+        
+        predictions[predictionId].resolved = true;
+        predictions[predictionId].correct = correct;
+        
+        if (correct) {
+            agentScores[predictions[predictionId].agent] += 10;
+        }
+        
+        emit PredictionResolved(predictionId, correct);
+    }
+    
+    function getAgentScore(address agent) external view returns (uint256) {
+        return agentScores[agent];
+    }
+}
