@@ -251,10 +251,10 @@ Have questions, ideas, or want to collaborate?
 ![Architecture Diagram](demo-screenshots/architecture.png)
 
 ### Live Activity Feed
-![Activity Feed](demo-screenshots/activity-feed.png)
+<img width="934" height="791" alt="image (3)" src="https://github.com/user-attachments/assets/e51e6995-f35d-492c-b3c0-3bc1c6a81085" />
 
 ### Prediction Markets
-![Prediction Market](demo-screenshots/prediction-market.png)
+<img width="1416" height="771" alt="image (2)" src="https://github.com/user-attachments/assets/f188b020-632e-4866-9552-6706149a8f5c" />
 
 > **Note**: These are placeholder images. [View interactive mockups](demo-screenshots/) or generate real screenshots from the HTML files.
 
