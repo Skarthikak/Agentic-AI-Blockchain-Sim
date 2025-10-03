@@ -250,9 +250,13 @@ Have questions, ideas, or want to collaborate?
 ### System Architecture  
 ![Architecture Diagram](demo-screenshots/architecture.png)
 
-### Multi-Agent Coordination
-![Agent Flow](demo-screenshots/agent-flow.png)
+### Live Activity Feed
+![Activity Feed](demo-screenshots/activity-feed.png)
 
+### Prediction Markets
+![Prediction Market](demo-screenshots/prediction-market.png)
+
+> **Note**: These are placeholder images. [View interactive mockups](demo-screenshots/) or generate real screenshots from the HTML files.
 
 **⭐ If this project inspires you, please give it a star on GitHub!**
 
