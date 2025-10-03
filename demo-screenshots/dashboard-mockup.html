@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic AI Blockchain Simulator - Dashboard</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #3182ce;
+            --success: #38a169;
+            --warning: #dd6b20;
+            --danger: #e53e3e;
+            --background: #1a202c;
+            --card-bg: #2d3748;
+            --text: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #2d3748 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 280px 1fr 320px;
+            grid-template-rows: 80px 1fr;
+            height: 100vh;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            grid-column: 1 / -1;
+            background: var(--primary);
+            border-radius: 12px;
+            padding: 0 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border: 1px solid var(--secondary);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, #63b3ed, #4299e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .live-badge {
+            background: var(--success);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        /* Left Sidebar - Agent Performance */
+        .sidebar-left {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid #4a5568;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            color: #63b3ed;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .agent-card {
+            background: rgba(26, 53, 93, 0.6);
+            border: 1px solid #4a5568;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--secondary);
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .agent-name {
+            font-weight: 600;
+            color: #90cdf4;
+        }
+
+        .agent-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .metric-value {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid #4a5568;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .chart-container {
+            background: rgba(26, 53, 93, 0.6);
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #4a5568;
+            flex: 1;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, #2d3748, #4a5568);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #90cdf4;
+            font-size: 1.1rem;
+            border: 2px dashed #4a5568;
+        }
+
+        /* Right Sidebar */
+        .sidebar-right {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            border: 1px solid #4a5568;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .activity-feed {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #4a5568;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.9rem;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: var(--success);
+            font-size: 0.8rem;
+            min-width: 70px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-agent {
+            color: #90cdf4;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <h1>🤖⛓️ Agentic AI Blockchain Simulator</h1>
+            </div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="live-badge">🟢 LIVE</span>
+                </div>
+                <div class="status-item">🤖 Active Agents: <strong>4/4</strong></div>
+                <div class="status-item">⛓️ Block Height: <strong>#1,247</strong></div>
+                <div class="status-item">📊 Predictions Today: <strong>42</strong></div>
+                <div class="status-item">💰 Total Rewards: <strong>1,250 tokens</strong></div>
+            </div>
+        </div>
+
+        <!-- Left Sidebar - Agent Performance -->
+        <div class="sidebar-left">
+            <h2 class="section-title">📈 Agent Performance Dashboard</h2>
+            
+            <div class="agent-card">
+                <div class="agent-header">
+                    <span class="agent-name">DataAnalysisAgent</span>
+                    <span style="color: var(--success);">🟢 Online</span>
+                </div>
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <span>Accuracy:</span>
+                        <span class="metric-value">92%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tasks:</span>
+                        <span class="metric-value">128</span>
+                    </div>
+                    <div class="metric">
+                        <span>Earnings:</span>
+                        <span class="metric-value">320 tokens</span>
+                    </div>
+                    <div class="metric">
+                        <span>Uptime:</span>
+                        <span class="metric-value">99.8%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-header">
+                    <span class="agent-name">PredictionAgent</span>
+                    <span style="color: var(--success);">🟢 Online</span>
+                </div>
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <span>Accuracy:</span>
+                        <span class="metric-value">87%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tasks:</span>
+                        <span class="metric-value">156</span>
+                    </div>
+                    <div class="metric">
+                        <span>Earnings:</span>
+                        <span class="metric-value">410 tokens</span>
+                    </div>
+                    <div class="metric">
+                        <span>Uptime:</span>
+                        <span class="metric-value">99.5%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-header">
+                    <span class="agent-name">ValidationAgent</span>
+                    <span style="color: var(--success);">🟢 Online</span>
+                </div>
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <span>Accuracy:</span>
+                        <span class="metric-value">94%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tasks:</span>
+                        <span class="metric-value">142</span>
+                    </div>
+                    <div class="metric">
+                        <span>Earnings:</span>
+                        <span class="metric-value">280 tokens</span>
+                    </div>
+                    <div class="metric">
+                        <span>Uptime:</span>
+                        <span class="metric-value">99.9%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="agent-card">
+                <div class="agent-header">
+                    <span class="agent-name">ExecutionAgent</span>
+                    <span style="color: var(--success);">🟢 Online</span>
+                </div>
+                <div class="agent-metrics">
+                    <div class="metric">
+                        <span>Success Rate:</span>
+                        <span class="metric-value">98%</span>
+                    </div>
+                    <div class="metric">
+                        <span>Tasks:</span>
+                        <span class="metric-value">168</span>
+                    </div>
+                    <div class="metric">
+                        <span>Earnings:</span>
+                        <span class="metric-value">240 tokens</span>
+                    </div>
+                    <div class="metric">
+                        <span>Uptime:</span>
+                        <span class="metric-value">99.7%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h2 class="section-title">📊 Prediction Market Activity</h2>
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    📈 Live Prediction vs Actual Performance Chart
+                </div>
+            </div>
+            
+            <h2 class="section-title">🔮 Recent Predictions</h2>
+            <div class="chart-container">
+                <div class="chart-placeholder">
+                    📋 Prediction History & Market Analysis
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="sidebar-right">
+            <h2 class="section-title">🕒 Live Activity Feed</h2>
+            <div class="activity-feed">
+                <div class="activity-item">
+                    <span class="activity-time">11:25:03</span>
+                    <div class="activity-content">
+                        <span class="activity-agent">DataAnalysisAgent</span> processed market data for prediction #156
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">11:25:01</span>
+                    <div class="activity-content">
+                        <span class="activity-agent">PredictionAgent</span> submitted prediction #156 with 87% confidence
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">11:24:58</span>
+                    <div class="activity-content">
+                        <span class="activity-agent">ValidationAgent</span> confirmed prediction accuracy: ✅ Approved
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">11:24:55</span>
+                    <div class="activity-content">
+                        <span class="activity-agent">ExecutionAgent</span> claimed rewards: <strong>+10 tokens</strong>
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">11:24:52</span>
+                    <div class="activity-content">
+                        🔗 New block mined <strong>#1247</strong> with 12 transactions
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">11:24:48</span>
+                    <div class="activity-content">
+                        <span class="activity-agent">DataAnalysisAgent</span> detected market trend shift
+                    </div>
+                </div>
+                <div class="activity-item">
+                    <span class="activity-time">11:24:45</span>
+                    <div class="activity-content">
+                        💰 Reward distribution: Agents earned <strong>45 tokens</strong> this hour
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
