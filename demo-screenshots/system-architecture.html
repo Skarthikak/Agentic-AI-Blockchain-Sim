@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Architecture - Agentic AI Blockchain Simulator</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #3182ce;
+            --success: #38a169;
+            --ai-color: #805ad5;
+            --blockchain-color: #dd6b20;
+            --background: #1a202c;
+            --card-bg: #2d3748;
+            --text: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--background) 0%, #2d3748 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .architecture-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 1px solid #4a5568;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #63b3ed, #4299e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: #a0aec0;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Architecture Grid */
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .layer {
+            background: rgba(26, 53, 93, 0.6);
+            border: 2px solid #4a5568;
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .layer:hover {
+            transform: translateY(-5px);
+            border-color: var(--secondary);
+            box-shadow: 0 15px 40px rgba(49, 130, 206, 0.2);
+        }
+
+        .layer-ai {
+            border-left: 6px solid var(--ai-color);
+        }
+
+        .layer-blockchain {
+            border-left: 6px solid var(--blockchain-color);
+        }
+
+        .layer-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4a5568;
+        }
+
+        .layer-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .layer-title {
+            font-size: 1.4rem;
+            color: #63b3ed;
+            font-weight: 600;
+        }
+
+        .layer-description {
+            color: #a0aec0;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        /* Components */
+        .components {
+            display: grid;
+            gap: 15px;
+        }
+
+        .component {
+            background: rgba(26, 53, 93, 0.8);
+            border: 1px solid #4a5568;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .component:hover {
+            transform: translateX(5px);
+            border-color: var(--secondary);
+        }
+
+        .component::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--secondary), var(--success));
+        }
+
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .component-icon {
+            font-size: 1.3rem;
+        }
+
+        .component-name {
+            font-weight: 600;
+            color: #90cdf4;
+            font-size: 1.1rem;
+        }
+
+        .component-description {
+            font-size: 0.9rem;
+            color: #a0aec0;
+            line-height: 1.4;
+        }
+
+        /* Data Flow */
+        .data-flow {
+            background: rgba(26, 53, 93, 0.6);
+            border: 2px solid #4a5568;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+
+        .flow-title {
+            text-align: center;
+            font-size: 1.3rem;
+            color: #63b3ed;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .flow-steps {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .flow-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50px;
+            right: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--ai-color), var(--blockchain-color));
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .flow-step {
+            text-align: center;
+            flex: 1;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-connector {
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary);
+            font-size: 1.5rem;
+            z-index: 2;
+        }
+
+        .flow-step:last-child .step-connector {
+            display: none;
+        }
+
+        .step-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            border: 3px solid var(--secondary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .step-label {
+            font-weight: 600;
+            color: #90cdf4;
+            margin-bottom: 5px;
+            font-size: 1rem;
+        }
+
+        .step-description {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            line-height: 1.3;
+        }
+
+        /* Technology Stack */
+        .tech-stack {
+            background: rgba(26, 53, 93, 0.6);
+            border: 2px solid #4a5568;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: rgba(26, 53, 93, 0.8);
+            border: 1px solid #4a5568;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            transform: translateY(-3px);
+            border-color: var(--secondary);
+        }
+
+        .tech-name {
+            font-weight: 600;
+            color: #90cdf4;
+            margin-bottom: 5px;
+        }
+
+        .tech-role {
+            font-size: 0.8rem;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <div class="architecture-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🏗️ System Architecture</h1>
+            <p>Multi-Layer Architecture Combining AI Agent Coordination with Blockchain Infrastructure</p>
+        </div>
+
+        <!-- Architecture Grid -->
+        <div class="architecture-grid">
+            <!-- AI Layer -->
+            <div class="layer layer-ai">
+                <div class="layer-header">
+                    <div class="layer-icon">🤖</div>
+                    <h2 class="layer-title">AI Agent Layer</h2>
+                </div>
+                <p class="layer-description">
+                    Autonomous AI agents specializing in different tasks, coordinated through LangGraph for sophisticated multi-agent workflows.
+                </p>
+                <div class="components">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🔍</div>
+                            <div class="component-name">DataAnalysisAgent</div>
+                        </div>
+                        <p class="component-description">
+                            Processes market data, identifies patterns, and prepares datasets for prediction models using real-time data streams.
+                        </p>
+                    </div>
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🔮</div>
+                            <div class="component-name">PredictionAgent</div>
+                        </div>
+                        <p class="component-description">
+                            Generates market predictions using machine learning models and calculates confidence scores for trading opportunities.
+                        </p>
+                    </div>
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">✅</div>
+                            <div class="component-name">ValidationAgent</div>
+                        </div>
+                        <p class="component-description">
+                            Cross-validates predictions, ensures quality control, and maintains system integrity through consensus mechanisms.
+                        </p>
+                    </div>
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🚀</div>
+                            <div class="component-name">ExecutionAgent</div>
+                        </div>
+                        <p class="component-description">
+                            Interacts with blockchain, submits transactions, claims rewards, and manages secure wallet operations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blockchain Layer -->
+            <div class="layer layer-blockchain">
+                <div class="layer-header">
+                    <div class="layer-icon">⛓️</div>
+                    <h2 class="layer-title">Blockchain Layer</h2>
+                </div>
+                <p class="layer-description">
+                    Decentralized infrastructure providing trust, transparency, and economic incentives for AI coordination and transactions.
+                </p>
+                <div class="components">
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">📊</div>
+                            <div class="component-name">Prediction Markets</div>
+                        </div>
+                        <p class="component-description">
+                            Smart contracts enabling AI agents to participate in decentralized prediction markets and stake tokens on outcomes.
+                        </p>
+                    </div>
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🏆</div>
+                            <div class="component-name">Agent Registry</div>
+                        </div>
+                        <p class="component-description">
+                            On-chain registry tracking AI agent performance, reputation scores, and historical accuracy metrics.
+                        </p>
+                    </div>
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">💰</div>
+                            <div class="component-name">Reward System</div>
+                        </div>
+                        <p class="component-description">
+                            Automated token distribution based on prediction accuracy and agent performance with transparent reward mechanisms.
+                        </p>
+                    </div>
+                    <div class="component">
+                        <div class="component-header">
+                            <div class="component-icon">🛡️</div>
+                            <div class="component-name">Security Layer</div>
+                        </div>
+                        <p class="component-description">
+                            Cryptographic security, transaction validation, and fraud prevention through decentralized consensus.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Flow -->
+        <div class="data-flow">
+            <h3 class="flow-title">🔄 Data Flow & Transaction Lifecycle</h3>
+            <div class="flow-steps">
+                <div class="flow-step">
+                    <div class="step-icon">📥</div>
+                    <div class="step-connector">→</div>
+                    <div class="step-label">Data Ingestion</div>
+                    <div class="step-description">Real-time market data from multiple sources</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon">🧠</div>
+                    <div class="step-connector">→</div>
+                    <div class="step-label">AI Analysis</div>
+                    <div class="step-description">Multi-agent processing and pattern recognition</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon">🔮</div>
+                    <div class="step-connector">→</div>
+                    <div class="step-label">Prediction</div>
+                    <div class="step-description">ML model inference and confidence scoring</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon">✅</div>
+                    <div class="step-connector">→</div>
+                    <div class="step-label">Validation</div>
+                    <div class="step-description">Cross-agent verification and consensus</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon">⛓️</div>
+                    <div class="step-connector">→</div>
+                    <div class="step-label">Execution</div>
+                    <div class="step-description">Blockchain transaction submission</div>
+                </div>
+                <div class="flow-step">
+                    <div class="step-icon">💰</div>
+                    <div class="step-label">Rewards</div>
+                    <div class="step-description">Performance-based token distribution</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technology Stack -->
+        <div class="tech-stack">
+            <h3 class="flow-title">🛠️ Technology Stack</h3>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <div class="tech-name">LangGraph</div>
+                    <div class="tech-role">AI Agent Orchestration</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Python</div>
+                    <div class="tech-role">AI/ML Development</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Solidity</div>
+                    <div class="tech-role">Smart Contracts</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">React</div>
+                    <div class="tech-role">Dashboard UI</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Node.js</div>
+                    <div class="tech-role">Backend API</div>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-name">Hardhat</div>
+                    <div class="tech-role">Blockchain Development</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
